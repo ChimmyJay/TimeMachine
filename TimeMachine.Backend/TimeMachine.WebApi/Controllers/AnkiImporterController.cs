@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TimeMachine.Core.AnkiImporter;
+using TimeMachine.Core.AnkiImporter.Commands;
+using TimeMachine.Core.AnkiImporter.DomainModels;
 using TimeMachine.Core.AnkiImporter.Enums;
 using TimeMachine.Core.AnkiImporter.Queries;
 using TimeMachine.WebApi.Contracts.AnkiImporter;
@@ -32,5 +34,20 @@ public class AnkiImporterController : ControllerBase
                 Type = type
             });
         return new AnalyzeFileResponse(ankiCards);
+    }
+
+    [Route("Import")]
+    [HttpPost]
+    public async Task<ActionResult<AddCardsResponse>> Import(AddCardsRequest req)
+    {
+        await _service.Import(
+            new ImportCommand
+            {
+                DeckName = req.DeckName,
+                Cards = req.Cards
+                    .Select(x => new AnkiCard(x.Front, x.Back))
+            });
+
+        return new AddCardsResponse();
     }
 }
