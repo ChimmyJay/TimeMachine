@@ -23,5 +23,15 @@ TimeMachine.WebApi                          # presentation layer 決定程式的
     Contracts/                              # 與外部服務規範的規格 例如:Web frontend(browser side)
         {Controller}/                       # Group by Controller 比較舒服,Contoller using 時可避免撞名
 ```
+PS: 如果用 EFCore 的話會塞在 TimeMachine.Core
 
 ## 開發規範
+規範可以打破,但在打破前須先提出討論.
+
+- 通過所有測試
+- Contracts 的前綴使用 Action name,後綴加上 Request/Response
+- 繼承深度 < 3 (從自訂物件)
+- 各 Project 使用 interface 隔開
+- TimeMachine.Core 都要有單元測試
+- 不吃 Exception & rethrow
+- 非同步與同步不要混用 ex: xxx.Result or xxx.GetAwaiter().GetResult()
